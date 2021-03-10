@@ -45,5 +45,13 @@ public class CartController {
 
         return new ResponseEntity(HttpStatus.NO_CONTENT);
     }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity deleteCart(@PathVariable("id") long id) {
+
+        cartService.deleteCart(id);
+
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
 }
 

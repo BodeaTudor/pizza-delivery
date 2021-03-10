@@ -102,4 +102,10 @@ public class CartService {
             cartRepository.save(cart);
         }
     }
+
+    public void deleteCart(long id) {
+        LOGGER.info("Deleting cart with id: {}", id);
+
+        cartRepository.deleteById(id);
+    }
 }
