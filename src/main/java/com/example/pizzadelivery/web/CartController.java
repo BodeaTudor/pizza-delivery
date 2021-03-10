@@ -2,13 +2,11 @@ package com.example.pizzadelivery.web;
 
 import com.example.pizzadelivery.service.CartService;
 import com.example.pizzadelivery.transfer.cart.AddPizzaToCartRequest;
+import com.example.pizzadelivery.transfer.cart.CartResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 
@@ -27,6 +25,23 @@ public class CartController {
     public ResponseEntity addPizzaToCart(@RequestBody @Valid AddPizzaToCartRequest request) {
 
         cartService.addPizzaToCart(request);
+
+        return new ResponseEntity(HttpStatus.NO_CONTENT);
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<CartResponse> getCart(@PathVariable("id") long customerId) {
+
+        CartResponse cart = cartService.getCart(customerId);
+
+        return new ResponseEntity<>(cart, HttpStatus.OK);
+
+    }
+
+    @DeleteMapping
+    public ResponseEntity removePizzaFromCart(@RequestBody @Valid AddPizzaToCartRequest request) {
+
+        cartService.removePizzaFromCart(request);
 
         return new ResponseEntity(HttpStatus.NO_CONTENT);
     }
