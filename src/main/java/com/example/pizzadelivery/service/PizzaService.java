@@ -55,6 +55,8 @@ public class PizzaService {
 
     public void deletePizza(long id) {
 
+        retrievePizza(id);
+
         LOGGER.info("Deleting pizza with id: {}", id);
 
         pizzaRepository.deleteById(id);

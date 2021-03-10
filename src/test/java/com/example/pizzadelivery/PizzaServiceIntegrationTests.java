@@ -96,7 +96,7 @@ public class PizzaServiceIntegrationTests {
 
     }
 
-    @Test(expected = EmptyResultDataAccessException.class)
+    @Test(expected = ResourceNotFoundException.class)
     public void testDeletePizza_whenNonExistingPizza_thenThrowException() {
 
         pizzaService.deletePizza(9999);
