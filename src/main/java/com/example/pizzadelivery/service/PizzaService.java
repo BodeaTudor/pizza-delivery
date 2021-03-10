@@ -1,6 +1,7 @@
 package com.example.pizzadelivery.service;
 
 import com.example.pizzadelivery.domain.Pizza;
+import com.example.pizzadelivery.exceptions.ResourceNotFoundException;
 import com.example.pizzadelivery.persistence.PizzaRepository;
 import com.example.pizzadelivery.transfer.pizza.SavePizzaRequest;
 import org.slf4j.Logger;
@@ -31,5 +32,12 @@ public class PizzaService {
         pizza.setImagePath(request.getImagePath());
 
         return pizzaRepository.save(pizza);
+    }
+
+    public Pizza retrievePizza(long id) {
+
+        LOGGER.info("Retrieving pizza with id: {}", id);
+
+        return pizzaRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Pizza with id " + id + " not found."));
     }
 }
