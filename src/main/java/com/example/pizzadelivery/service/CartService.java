@@ -3,13 +3,19 @@ package com.example.pizzadelivery.service;
 import com.example.pizzadelivery.domain.Cart;
 import com.example.pizzadelivery.domain.Customer;
 import com.example.pizzadelivery.domain.Pizza;
+import com.example.pizzadelivery.exceptions.ResourceNotFoundException;
 import com.example.pizzadelivery.persistence.CartRepository;
 import com.example.pizzadelivery.transfer.cart.AddPizzaToCartRequest;
+import com.example.pizzadelivery.transfer.cart.CartResponse;
+import com.example.pizzadelivery.transfer.pizza.PizzaInCartResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.HashSet;
+import java.util.Set;
 
 @Service
 public class CartService {
@@ -45,5 +51,32 @@ public class CartService {
         cart.addToCart(pizza);
 
         cartRepository.save(cart);
+    }
+
+    @Transactional
+    public CartResponse getCart(long customerId) {
+        LOGGER.info("Retrieving cart from customer with id: {}", customerId);
+        Cart cart = cartRepository.findById(customerId).orElseThrow(() -> new ResourceNotFoundException(
+                "There is no cart for customer with id: " + customerId));
+
+        CartResponse cartResponse = new CartResponse();
+        cartResponse.setId(cart.getId());
+
+        Set<PizzaInCartResponse> pizzas = new HashSet<>();
+
+        for (Pizza pizza : cart.getPizzas()) {
+            PizzaInCartResponse pizzaInCartResponse = new PizzaInCartResponse();
+            pizzaInCartResponse.setId(pizza.getId());
+            pizzaInCartResponse.setName(pizza.getName());
+            pizzaInCartResponse.setPrice(pizza.getPrice());
+            pizzaInCartResponse.setIngredients(pizza.getIngredients());
+            pizzaInCartResponse.setImagePath(pizza.getImagePath());
+
+            pizzas.add(pizzaInCartResponse);
+        }
+
+        cartResponse.setPizzas(pizzas);
+
+        return cartResponse;
     }
 }
