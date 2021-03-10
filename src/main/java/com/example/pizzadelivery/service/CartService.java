@@ -79,4 +79,27 @@ public class CartService {
 
         return cartResponse;
     }
+
+    public Cart getCartById(long id) {
+
+        LOGGER.info("Retrieving cart with id : {}", id);
+
+        return cartRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Cart with id " + id + " doesn't exist."));
+
+    }
+
+    @Transactional
+    public void removePizzaFromCart(AddPizzaToCartRequest request) {
+        Cart cart = getCartById(request.getCustomerId());
+
+        if ((cart.getCustomer() != null)) {
+            LOGGER.info("Cart found.");
+            Pizza pizza = pizzaService.retrievePizza(request.getPizzaId());
+
+            LOGGER.info("Removing pizza with id {} from cart.", request.getPizzaId());
+            cart.removeFromCart(pizza);
+
+            cartRepository.save(cart);
+        }
+    }
 }
