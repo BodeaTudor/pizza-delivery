@@ -6,10 +6,7 @@ import com.example.pizzadelivery.transfer.pizza.SavePizzaRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 
@@ -30,5 +27,13 @@ public class PizzaController {
         Pizza newPizza = pizzaService.addPizza(request);
 
         return new ResponseEntity<>(newPizza, HttpStatus.CREATED);
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<Pizza> retrievePizza(@PathVariable("id") long id) {
+
+        Pizza retrievedPizza = pizzaService.retrievePizza(id);
+
+        return new ResponseEntity<>(retrievedPizza, HttpStatus.OK);
     }
 }
