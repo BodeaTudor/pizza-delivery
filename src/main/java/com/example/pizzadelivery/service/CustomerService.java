@@ -2,6 +2,7 @@ package com.example.pizzadelivery.service;
 
 import com.example.pizzadelivery.domain.Customer;
 import com.example.pizzadelivery.domain.Pizza;
+import com.example.pizzadelivery.exceptions.ResourceNotFoundException;
 import com.example.pizzadelivery.persistence.CustomerRepository;
 import com.example.pizzadelivery.transfer.customer.SaveCustomerRequest;
 import org.slf4j.Logger;
@@ -30,5 +31,12 @@ public class CustomerService {
         customer.setLastName(request.getLastName());
 
         return customerRepository.save(customer);
+    }
+
+    public Customer getCustomer(long id) {
+
+        LOGGER.info("Retrieving customer with id: {}", id);
+
+        return customerRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Customer with id " + id + " not found."));
     }
 }
