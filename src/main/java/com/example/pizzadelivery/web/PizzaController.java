@@ -36,4 +36,20 @@ public class PizzaController {
 
         return new ResponseEntity<>(retrievedPizza, HttpStatus.OK);
     }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<Pizza> updatePizza(@PathVariable("id") long id, @RequestBody @Valid SavePizzaRequest request) {
+
+        Pizza updatedPizza = pizzaService.updatePizza(id, request);
+
+        return new ResponseEntity<>(updatedPizza, HttpStatus.OK);
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity deletePizza(@PathVariable("id") long id) {
+
+        pizzaService.deletePizza(id);
+
+        return new ResponseEntity(HttpStatus.NO_CONTENT);
+    }
 }
