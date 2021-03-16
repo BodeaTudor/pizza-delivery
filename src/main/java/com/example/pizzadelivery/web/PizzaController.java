@@ -4,6 +4,8 @@ import com.example.pizzadelivery.domain.Pizza;
 import com.example.pizzadelivery.service.PizzaService;
 import com.example.pizzadelivery.transfer.pizza.SavePizzaRequest;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -30,12 +32,12 @@ public class PizzaController {
         return new ResponseEntity<>(newPizza, HttpStatus.CREATED);
     }
 
-    @GetMapping("/{id}")
-    public ResponseEntity<Pizza> retrievePizza(@PathVariable("id") long id) {
+    @GetMapping()
+    public ResponseEntity<Page<Pizza>> retrievePizzas(Pageable pageable) {
 
-        Pizza retrievedPizza = pizzaService.retrievePizza(id);
+        Page<Pizza> pizzas = pizzaService.retrievePizzas(pageable);
 
-        return new ResponseEntity<>(retrievedPizza, HttpStatus.OK);
+        return new ResponseEntity<>(pizzas, HttpStatus.OK);
     }
 
     @PutMapping("/{id}")

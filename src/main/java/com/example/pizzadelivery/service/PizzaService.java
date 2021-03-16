@@ -8,6 +8,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -40,6 +42,13 @@ public class PizzaService {
         LOGGER.info("Retrieving pizza with id: {}", id);
 
         return pizzaRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Pizza with id " + id + " not found."));
+    }
+
+    public Page<Pizza> retrievePizzas(Pageable pageable) {
+
+        LOGGER.info("Retrieving pizzas...");
+
+        return pizzaRepository.findAll(pageable);
     }
 
     public Pizza updatePizza(long id, SavePizzaRequest request) {
